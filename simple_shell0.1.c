@@ -11,7 +11,6 @@
 int main(void)
 {
 	char line[BUFFER_SIZE];
-	char *tokens[BUFFER_SIZE / 2 + 1];
 	pid_t pid;
 	int status;
 
@@ -33,15 +32,6 @@ int main(void)
 
 		line[strlen(line)-1] = '\0';
 
-		char *token = strtok(line, " ");
-		int i = 0;
-		while (token != NULL)
-		{
-			tokens[i++] = token;
-			token = strtok(NULL, " ");
-		}
-		tokens[i] = NULL;
-
 		pid = fork();
 		if (pid < 0)
 		{
@@ -50,9 +40,9 @@ int main(void)
 		}
 		else if (pid == 0)
 		{
-			if (execvp(tokens[0], tokens) == -1)
+			if (execlp(line, line, NULL) == -1)
 			{
-				perror("execvp");
+				perror("execlp");
 				exit(EXIT_FAILURE);
 			}
 		}
